@@ -197,6 +197,7 @@ print_success "Python environment ready"
 print_step "Final configuration..."
 mkdir -p logs
 chmod +x setup_modsecurity_config.sh
+chmod a+x scripts/*
 print_success "Configuration complete"
 
 echo ""
