@@ -25,7 +25,7 @@ print_warning() {
 }
 
 echo -e "${BLUE}+========================================+${NC}"
-echo -e "${BLUE}|${NC}   AI-SwAutoMorph Platform Setup    ${BLUE}|${NC}"
+echo -e "${BLUE}|${NC}   OPCP-SwAutoMorph Platform Setup    ${BLUE}|${NC}"
 echo -e "${BLUE}+========================================+${NC}"
 echo ""
 
@@ -111,12 +111,52 @@ fi
 
 # Install Docker
 print_step "Installing Docker..."
-curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh > /dev/null 2>&1
-sudo usermod -aG docker $USER
-sudo curl -sL "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-rm -f get-docker.sh
-print_success "Docker installed"
+DOCKER_INSTALLED=false
+
+# Method 1: Official apt repository (preferred, no DNS dependency on get.docker.com)
+if ! command -v docker &> /dev/null; then
+    sudo apt install -y ca-certificates curl gnupg > /dev/null 2>&1
+    sudo install -m 0755 -d /etc/apt/keyrings
+    for attempt in 1 2 3; do
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg 2>/dev/null && break
+        print_warning "Docker GPG key download attempt $attempt failed, retrying in 5s..."
+        sleep 5
+    done
+    sudo chmod a+r /etc/apt/keyrings/docker.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+        sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt update > /dev/null 2>&1
+    if sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin > /dev/null 2>&1; then
+        DOCKER_INSTALLED=true
+    fi
+fi
+
+# Method 2: Fallback to convenience script if apt method failed
+if ! command -v docker &> /dev/null && [ "$DOCKER_INSTALLED" = false ]; then
+    print_warning "Apt method failed, trying convenience script..."
+    for attempt in 1 2 3; do
+        curl -fsSL https://get.docker.com -o get-docker.sh 2>/dev/null && break
+        print_warning "Download attempt $attempt failed, retrying in 5s..."
+        sleep 5
+    done
+    if [ -f get-docker.sh ]; then
+        sudo sh get-docker.sh > /dev/null 2>&1 && DOCKER_INSTALLED=true
+        rm -f get-docker.sh
+    fi
+fi
+
+if command -v docker &> /dev/null; then
+    # Add user to docker group (group is created by the install)
+    sudo usermod -aG docker $USER
+    # Install docker-compose standalone only if compose plugin is missing
+    if ! docker compose version &> /dev/null; then
+        sudo curl -fsSL "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
+        sudo chmod +x /usr/local/bin/docker-compose
+    fi
+    print_success "Docker installed"
+else
+    print_error "Docker installation failed — check network connectivity and retry"
+fi
 
 # Configure AWS
 print_step "Configuring AWS credentials..."
@@ -140,9 +180,9 @@ export AWS_ENDPOINT_URL_S3=https://s3.gra.io.cloud.ovh.net/
 print_success "AWS credentials configured"
 
 # Clone repository
-print_step "Cloning AI-SwAutoMorph repository..."
-git clone git@github.com:Sam9682/ai-swautomorph.git > /dev/null 2>&1
-cd ai-swautomorph
+print_step "Cloning OPCP-SwAutoMorph repository..."
+git clone git@github.com:Sam9682/opcp-swautomorph.git > /dev/null 2>&1
+cd opcp-swautomorph
 git submodule update --init --recursive > /dev/null 2>&1
 print_success "Repository cloned"
 
@@ -164,6 +204,6 @@ echo -e "${GREEN}[OK] Installation completed successfully!${NC}"
 echo ""
 print_warning "Don't forget to :"
 print_warning "     - modify ./conf/deploy.ini with your platform settings, PLTF_NAME and DOMAIN values"
-print_warning "     - add ssl certificate in ~/ai-swautomorph/ssl/fullchain_domain.crt for nginx https"
-print_warning "     - add ssl private key in ~/ai-swautomorph/ssl/privateKey_domain.key for nginx https"
+print_warning "     - add ssl certificate in ~/opcp-swautomorph/ssl/fullchain_domain.crt for nginx https"
+print_warning "     - add ssl private key in ~/opcp-swautomorph/ssl/privateKey_domain.key for nginx https"
 print_warning "     - enter aws_access_key_id & aws_secret_access_key in ~/.aws/credentials for s3 synchronization"

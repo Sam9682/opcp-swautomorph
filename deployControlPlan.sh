@@ -5,9 +5,12 @@
 
 set -e
 
+# Resolve the directory where this script lives
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # Load configuration from deploy.ini
 load_config() {
-    local config_file="./conf/deploy.ini"
+    local config_file="$SCRIPT_DIR/conf/deploy.ini"
     if [ -f "$config_file" ]; then
         echo "📋 Loading configuration from $config_file"
         # Source the config file, ignoring comments and empty lines
@@ -32,9 +35,9 @@ load_config() {
 load_config
 
 # Activate virtual environment if it exists
-if [ -d ".venv" ]; then
+if [ -d "$SCRIPT_DIR/.venv" ]; then
     echo "🐍 Activating virtual environment..."
-    source .venv/bin/activate
+    source "$SCRIPT_DIR/.venv/bin/activate"
     echo "  ✅ Virtual environment activated"
 fi
 
@@ -1561,7 +1564,11 @@ configure_nginx() {
 }
 
 setup_modsecurity_config() {
-    source ./setup_modsecurity_config.sh
+    if [ -f "$SCRIPT_DIR/setup_modsecurity_config.sh" ]; then
+        source "$SCRIPT_DIR/setup_modsecurity_config.sh"
+    else
+        echo "  ⚠️ setup_modsecurity_config.sh not found, skipping ModSecurity config"
+    fi
 }
 
 check_and_enable_modsecurity() {
