@@ -18,7 +18,7 @@
 
 ### 🌟 Overview
 
-AI-SwAutoMorph provides two specialized virtual AI agents designed for autonomous application management with enhanced features:
+OPCP-SwAutoMorph provides two specialized virtual AI agents designed for autonomous application management with enhanced features:
 
 - **🔧 AI Chat Developer Agent**: Code modification, feature development, and application enhancement
 - **🚀 AI Chat Operations Agent**: Deployment operations, infrastructure management, and application lifecycle
@@ -65,7 +65,7 @@ Both agents support:
 - **action_operation** (optional): Specific operation type (defaults to "MODIFY_CODE", validated against allowed operations)
 
 #### 🎯 Enhanced Context Loading
-The agent automatically loads context from `/home/ubuntu/ai-swautomorph/shared/MODIFY_CODE_context.md` which includes:
+The agent automatically loads context from `/home/ubuntu/opcp-swautomorph/shared/MODIFY_CODE_context.md` which includes:
 - Application-specific configuration with environment variables
 - User context and permissions with role-based access
 - Git repository information with branch management
@@ -366,7 +366,7 @@ CREATE TABLE billing_activities (
 
 ### 🌟 Aperçu
 
-AI-SwAutoMorph fournit deux agents IA virtuels spécialisés conçus pour la gestion autonome d'applications avec fonctionnalités améliorées :
+OPCP-SwAutoMorph fournit deux agents IA virtuels spécialisés conçus pour la gestion autonome d'applications avec fonctionnalités améliorées :
 
 - **🔧 Agent Développeur AI Chat** : Modification de code, développement de fonctionnalités et amélioration d'applications
 - **🚀 Agent Opérations AI Chat** : Opérations de déploiement, gestion d'infrastructure et cycle de vie des applications

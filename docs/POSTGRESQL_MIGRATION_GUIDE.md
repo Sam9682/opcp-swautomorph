@@ -3,7 +3,7 @@
 ## English
 
 <div class="center">
-🚀 **SQLite to PostgreSQL Migration for AI-SwAutoMorph** 📊
+🚀 **SQLite to PostgreSQL Migration for OPCP-SwAutoMorph** 📊
 </div>
 
 ### 📋 Table of Contents
@@ -18,7 +18,7 @@
 
 ### 🌟 Overview
 
-AI-SwAutoMorph has migrated from SQLite to PostgreSQL to provide enterprise-grade database performance, scalability, and reliability. This guide covers the complete migration process, configuration, and verification steps.
+OPCP-SwAutoMorph has migrated from SQLite to PostgreSQL to provide enterprise-grade database performance, scalability, and reliability. This guide covers the complete migration process, configuration, and verification steps.
 
 #### 🎯 Migration Benefits
 
@@ -355,7 +355,7 @@ curl -s https://www.swautomorph.com/api/auth/status
 ## Français
 
 <div class="center">
-🚀 **Migration SQLite vers PostgreSQL pour AI-SwAutoMorph** 📊
+🚀 **Migration SQLite vers PostgreSQL pour OPCP-SwAutoMorph** 📊
 </div>
 
 ### 📋 Table des Matières
@@ -370,7 +370,7 @@ curl -s https://www.swautomorph.com/api/auth/status
 
 ### 🌟 Aperçu {#aperçu-fr}
 
-AI-SwAutoMorph a migré de SQLite vers PostgreSQL pour fournir des performances de base de données de niveau entreprise, une évolutivité et une fiabilité. Ce guide couvre le processus complet de migration, la configuration et les étapes de vérification.
+OPCP-SwAutoMorph a migré de SQLite vers PostgreSQL pour fournir des performances de base de données de niveau entreprise, une évolutivité et une fiabilité. Ce guide couvre le processus complet de migration, la configuration et les étapes de vérification.
 
 #### 🎯 Avantages de la Migration
 

@@ -1,10 +1,10 @@
 #!/bin/bash
-# PostgreSQL Setup Script for AI-SwAutoMorph
+# PostgreSQL Setup Script for OPCP-SwAutoMorph
 # This script sets up PostgreSQL and migrates from SQLite
 
 set -e
 
-echo "🐘 Setting up PostgreSQL for AI-SwAutoMorph..."
+echo "🐘 Setting up PostgreSQL for OPCP-SwAutoMorph..."
 
 # Check if PostgreSQL is installed
 if ! command -v psql &> /dev/null; then

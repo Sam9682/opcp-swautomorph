@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""MCP Server for AI-SwAutoMorph"""
+"""MCP Server for OPCP-SwAutoMorph"""
 import json
 # import sqlite3  # COMMENTED OUT - Using PostgreSQL now
 from typing import Any, Dict, List
@@ -147,7 +147,7 @@ async def main():
     """Main MCP server loop"""
     server = MCPServer()
     
-    print("MCP Server for AI-SwAutoMorph started")
+    print("MCP Server for opcp-swautomorph started")
     print("Available tools: list_applications, add_application, list_users")
     
     # Simple stdin/stdout MCP protocol

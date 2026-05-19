@@ -1,3 +1,3 @@
 #!/bin/bash
-cd /home/ubuntu/ai-swautomorph
+cd /home/ubuntu/opcp-swautomorph
 ./deployControlPlan.sh stop --locally --keep-gitea-running

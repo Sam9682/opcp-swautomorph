@@ -1,4 +1,4 @@
--- PostgreSQL Schema for AI-SwAutoMorph
+-- PostgreSQL Schema for OPCP-SwAutoMorph
 -- Migration from SQLite to PostgreSQL
 
 -- Enable UUID extension for better primary keys

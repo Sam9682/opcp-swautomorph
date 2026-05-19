@@ -1,4 +1,4 @@
-# 🏗️ AI-SwAutoMorph Architecture Design / Guide d'Architecture AI-SwAutoMorph
+# 🏗️ OPCP-SwAutoMorph Architecture Design / Guide d'Architecture OPCP-SwAutoMorph
 
 ## English
 
@@ -8,7 +8,7 @@
 
 ### 🌟 Overview
 
-AI-SwAutoMorph is a **centralized application deployment and management platform** designed for GenAI agents. It provides automated deployment, lifecycle management, and SSO authentication for web applications through multiple interfaces (Web, CLI, API, MCP). The platform enables GenAI agents to autonomously deploy, manage, and access web applications without human intervention.
+OPCP-SwAutoMorph is a **centralized application deployment and management platform** designed for GenAI agents. It provides automated deployment, lifecycle management, and SSO authentication for web applications through multiple interfaces (Web, CLI, API, MCP). The platform enables GenAI agents to autonomously deploy, manage, and access web applications without human intervention.
 
 **Core Architecture**: Modular Flask application with thread-safe database operations, virtual AI agents, multi-server support, comprehensive billing system, and enhanced security features.
 
@@ -17,7 +17,7 @@ AI-SwAutoMorph is a **centralized application deployment and management platform
 #### 1. 📦 Enhanced Modular Flask Application
 
 ```
-🏠 ai-swautomorph/
+🏠 opcp-swautomorph/
 ├── 📁 src/                          # Core application modules
 │   ├── ⚙️ config_postgres.py        # Configuration & multi-language support
 │   ├── 🗄️ database_postgres.py       # PostgreSQL database manager with connection pooling
@@ -213,7 +213,7 @@ The platform provides **two specialized AI agents** with advanced features:
 
 ### 🌟 Aperçu
 
-AI-SwAutoMorph est une **plateforme centralisée de déploiement et de gestion d'applications** conçue pour les agents GenAI. Elle fournit un déploiement automatisé, une gestion du cycle de vie et une authentification SSO pour les applications web à travers plusieurs interfaces (Web, CLI, API, MCP). La plateforme permet aux agents GenAI de déployer, gérer et accéder de manière autonome aux applications web sans intervention humaine.
+OPCP-SwAutoMorph est une **plateforme centralisée de déploiement et de gestion d'applications** conçue pour les agents GenAI. Elle fournit un déploiement automatisé, une gestion du cycle de vie et une authentification SSO pour les applications web à travers plusieurs interfaces (Web, CLI, API, MCP). La plateforme permet aux agents GenAI de déployer, gérer et accéder de manière autonome aux applications web sans intervention humaine.
 
 **Architecture Principale**: Application Flask modulaire avec opérations de base de données thread-safe, agents IA virtuels, support multi-serveurs, système de facturation complet et fonctionnalités de sécurité avancées.
 
@@ -222,7 +222,7 @@ AI-SwAutoMorph est une **plateforme centralisée de déploiement et de gestion d
 #### 1. 📦 Application Flask Modulaire Améliorée
 
 ```
-🏠 ai-swautomorph/
+🏠 opcp-swautomorph/
 ├── 📁 src/                          # Modules d'application principaux
 │   ├── ⚙️ config_postgres.py        # Configuration et support multi-langues
 │   ├── 🗄️ database_postgres.py       # Gestionnaire de base de données PostgreSQL avec pooling

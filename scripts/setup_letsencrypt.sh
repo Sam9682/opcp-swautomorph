@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Let's Encrypt SSL Certificate Setup for AI-SwAutoMorph
+# Let's Encrypt SSL Certificate Setup for OPCP-SwAutoMorph
 
 set -e
 

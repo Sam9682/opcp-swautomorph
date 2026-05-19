@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Test Suites for AI-SwAutoMorph Platform Testing Tool
+Test Suites for OPCP-SwAutoMorph Platform Testing Tool
 
 This module contains all test suite implementations.
 """

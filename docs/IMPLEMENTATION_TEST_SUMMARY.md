@@ -2,7 +2,7 @@
 
 ## Overview
 
-A comprehensive testing tool has been successfully implemented for the AI-SwAutoMorph platform. The tool is located in `./scripts/` and provides automated testing for all major platform functionality.
+A comprehensive testing tool has been successfully implemented for the OPCP-SwAutoMorph platform. The tool is located in `./scripts/` and provides automated testing for all major platform functionality.
 
 ## Files Created
 

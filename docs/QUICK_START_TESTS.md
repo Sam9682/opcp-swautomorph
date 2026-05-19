@@ -119,7 +119,7 @@ python3 scripts/test_platform.py --cleanup-only
 
 ```
 ================================================================================
-AI-SwAutoMorph Platform Testing Tool
+OPCP-SwAutoMorph Platform Testing Tool
 ================================================================================
 Platform: https://localhost:443
 Database: localhost:5432/ai_swautomorph

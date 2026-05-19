@@ -1,6 +1,6 @@
-# AI-SwAutoMorph Platform Testing Tool
+# OPCP-SwAutoMorph Platform Testing Tool
 
-Comprehensive automated testing tool for the AI-SwAutoMorph platform.
+Comprehensive automated testing tool for the OPCP-SwAutoMorph platform.
 
 ## Features
 
@@ -306,4 +306,4 @@ For issues or questions:
 
 ## License
 
-This tool is part of the AI-SwAutoMorph project.
+This tool is part of the OPCP-SwAutoMorph project.

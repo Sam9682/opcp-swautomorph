@@ -1,4 +1,4 @@
-"""Configuration settings for AI-SwAutoMorph"""
+"""Configuration settings for OPCP-SwAutoMorph"""
 import os
 import subprocess
 import logging
@@ -55,7 +55,7 @@ def get_platform_name():
                     return line.split('=', 1)[1].strip().strip("'\"")
     except Exception as e:
         logger.error(f'Failed to read PLTF_NAME from deploy.ini: {e}')
-    return 'AI-SwAutoMorph'
+    return 'OPCP-SwAutoMorph'
 
 # Domain name from deploy.ini
 def get_domain_name():

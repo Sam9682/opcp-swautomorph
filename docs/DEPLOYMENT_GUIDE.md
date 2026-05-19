@@ -4,7 +4,7 @@
 
 ### Overview
 
-The AI-SwAutoMorph platform supports deploying applications across multiple servers with automatic capacity management, real-time monitoring, and GenAI-powered code evolution. Users can clone, start, stop, and monitor applications in their own isolated directories with full multi-server support, comprehensive billing tracking, and bilingual interface (English/French).
+The OPCP-SwAutoMorph platform supports deploying applications across multiple servers with automatic capacity management, real-time monitoring, and GenAI-powered code evolution. Users can clone, start, stop, and monitor applications in their own isolated directories with full multi-server support, comprehensive billing tracking, and bilingual interface (English/French).
 
 ### Enhanced Features
 
@@ -402,7 +402,7 @@ Applications must include a `deployApp.sh` script that supports:
 
 ### Aperçu
 
-La plateforme AI-SwAutoMorph prend en charge le déploiement d'applications sur plusieurs serveurs avec gestion automatique de capacité, surveillance en temps réel et évolution de code alimentée par GenAI. Les utilisateurs peuvent cloner, démarrer, arrêter et surveiller les applications dans leurs propres répertoires isolés avec support multi-serveurs complet, suivi de facturation complet et interface bilingue (Anglais/Français).
+La plateforme OPCP-SwAutoMorph prend en charge le déploiement d'applications sur plusieurs serveurs avec gestion automatique de capacité, surveillance en temps réel et évolution de code alimentée par GenAI. Les utilisateurs peuvent cloner, démarrer, arrêter et surveiller les applications dans leurs propres répertoires isolés avec support multi-serveurs complet, suivi de facturation complet et interface bilingue (Anglais/Français).
 
 ### Fonctionnalités Améliorées
 

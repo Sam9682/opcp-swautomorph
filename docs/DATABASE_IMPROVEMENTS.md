@@ -3,7 +3,7 @@
 ## English
 
 <div class="center">
-🚀 **PostgreSQL Database Architecture for AI-SwAutoMorph** 📊
+🚀 **PostgreSQL Database Architecture for OPCP-SwAutoMorph** 📊
 </div>
 
 ### 📋 Table of Contents
@@ -19,7 +19,7 @@
 
 ### 🌟 Overview
 
-AI-SwAutoMorph has migrated from SQLite to **PostgreSQL** for enterprise-grade performance, scalability, and reliability. The system now features connection pooling, ACID transactions, advanced data types, and comprehensive monitoring capabilities.
+OPCP-SwAutoMorph has migrated from SQLite to **PostgreSQL** for enterprise-grade performance, scalability, and reliability. The system now features connection pooling, ACID transactions, advanced data types, and comprehensive monitoring capabilities.
 
 #### 🎯 Key Improvements
 - **🐘 PostgreSQL Database**: Enterprise-grade database with full ACID compliance
@@ -780,7 +780,7 @@ def get_database_stats():
 ```python
 #!/usr/bin/env python3
 """
-SQLite to PostgreSQL Migration Script for AI-SwAutoMorph
+SQLite to PostgreSQL Migration Script for OPCP-SwAutoMorph
 Migrates all data from SQLite database to PostgreSQL
 """
 
@@ -1004,7 +1004,7 @@ def execute_safe_query(query_template, params, allowed_tables=None):
 ## Français
 
 <div class="center">
-🚀 **Architecture de Base de Données PostgreSQL pour AI-SwAutoMorph** 📊
+🚀 **Architecture de Base de Données PostgreSQL pour OPCP-SwAutoMorph** 📊
 </div>
 
 ### 📋 Table des Matières
@@ -1020,7 +1020,7 @@ def execute_safe_query(query_template, params, allowed_tables=None):
 
 ### 🌟 Aperçu
 
-AI-SwAutoMorph a migré de SQLite vers **PostgreSQL** pour des performances, une évolutivité et une fiabilité de niveau entreprise. Le système dispose maintenant de la mise en pool de connexions, des transactions ACID, des types de données avancés et des capacités de surveillance complètes.
+OPCP-SwAutoMorph a migré de SQLite vers **PostgreSQL** pour des performances, une évolutivité et une fiabilité de niveau entreprise. Le système dispose maintenant de la mise en pool de connexions, des transactions ACID, des types de données avancés et des capacités de surveillance complètes.
 
 #### 🎯 Améliorations Clés
 - **🐘 Base de Données PostgreSQL** : Base de données de niveau entreprise avec conformité ACID complète

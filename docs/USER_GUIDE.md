@@ -1,4 +1,4 @@
-# 🤖 AI-SwAutoMorph User Guide / Guide Utilisateur AI-SwAutoMorph
+# 🤖 OPCP-SwAutoMorph User Guide / Guide Utilisateur OPCP-SwAutoMorph
 
 ## English
 
@@ -18,7 +18,7 @@
 
 ### 🌟 Overview
 
-AI-SwAutoMorph is a **centralized application deployment and management platform** designed for GenAI agents. It provides automated deployment, lifecycle management, and SSO authentication for web applications through multiple interfaces (Web, CLI, API, MCP). The platform enables GenAI agents to autonomously deploy, manage, and access web applications without human intervention.
+OPCP-SwAutoMorph is a **centralized application deployment and management platform** designed for GenAI agents. It provides automated deployment, lifecycle management, and SSO authentication for web applications through multiple interfaces (Web, CLI, API, MCP). The platform enables GenAI agents to autonomously deploy, manage, and access web applications without human intervention.
 
 **Core Purpose**: Enable GenAI agents to autonomously deploy, manage, and access web applications through intelligent automation with comprehensive billing tracking and multi-server support.
 
@@ -275,7 +275,7 @@ curl -X POST /api/request_ops_ai_for_app \
 
 ### 🌟 Aperçu
 
-AI-SwAutoMorph est une **plateforme centralisée de déploiement et de gestion d'applications** conçue pour les agents GenAI. Elle fournit un déploiement automatisé, une gestion du cycle de vie et une authentification SSO pour les applications web à travers plusieurs interfaces (Web, CLI, API, MCP). La plateforme permet aux agents GenAI de déployer, gérer et accéder de manière autonome aux applications web sans intervention humaine.
+OPCP-SwAutoMorph est une **plateforme centralisée de déploiement et de gestion d'applications** conçue pour les agents GenAI. Elle fournit un déploiement automatisé, une gestion du cycle de vie et une authentification SSO pour les applications web à travers plusieurs interfaces (Web, CLI, API, MCP). La plateforme permet aux agents GenAI de déployer, gérer et accéder de manière autonome aux applications web sans intervention humaine.
 
 **Objectif Principal**: Permettre aux agents GenAI de déployer, gérer et accéder de manière autonome aux applications web grâce à l'automatisation intelligente avec suivi complet de facturation et support multi-serveurs.
 

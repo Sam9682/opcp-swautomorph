@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# AI-SwAutoMorph Production Deployment Script
+# OPCP-SwAutoMorph Production Deployment Script
 # Organized with functions for better maintainability
 
 set -e
@@ -264,7 +264,7 @@ check_flask_status() {
 check_nginx_status() {
     if systemctl is-active --quiet nginx; then
         echo -e "  $OK Nginx: Running"
-        if [ -f "${NGINX_SITES_ENABLED:-/etc/nginx/sites-enabled}/${NGINX_SITE_NAME:-ai-swautomorph}" ]; then
+        if [ -f "${NGINX_SITES_ENABLED:-/etc/nginx/sites-enabled}/${NGINX_SITE_NAME:-opcp-swautomorph}" ]; then
             echo -e "  $OK $NAME_OF_APPLICATION site: Configured"
         else
             echo -e "  $WARN $NAME_OF_APPLICATION site: Not configured"
@@ -382,8 +382,8 @@ backup_database() {
     echo "    📍 Server IP: $SERVER_IP"
     
     # Sync the specific backup to S3 with IP-based path structure
-    if aws s3 sync "$BACKUP_DIR" "s3://softfluid/ai-swautomorph/db/backup/$SERVER_IP/$DATETIME/" --profile OVH-SWAUTOMORPH; then
-        echo -e "  $OK Backup synced to s3://softfluid/ai-swautomorph/db/backup/$SERVER_IP/$DATETIME/"
+    if aws s3 sync "$BACKUP_DIR" "s3://softfluid/opcp-swautomorph/db/backup/$SERVER_IP/$DATETIME/" --profile OVH-SWAUTOMORPH; then
+        echo -e "  $OK Backup synced to s3://softfluid/opcp-swautomorph/db/backup/$SERVER_IP/$DATETIME/"
     else
         echo "  ⚠️ S3 sync failed or not configured"
     fi
@@ -395,7 +395,7 @@ backup_logs() {
     
     if [ -d "logs" ] && [ "$(ls -A logs 2>/dev/null)" ]; then
         echo "  📄 Synchronizing logs to S3..."
-        aws s3 sync ./logs s3://softfluid/ai-swautomorph/logs --profile OVH-SWAUTOMORPH
+        aws s3 sync ./logs s3://softfluid/opcp-swautomorph/logs --profile OVH-SWAUTOMORPH
         echo -e "  $OK Logs backup completed"
     else
         echo -e "  $WARN No logs directory or logs found - skipping backup"
@@ -446,7 +446,7 @@ recover_database() {
         BACKUP_SOURCE=$(python3 << 'EOF'
 from simple_term_menu import TerminalMenu
 
-options = ["Local backups (./softfluid/db/backup)", "Remote S3 backups (s3://softfluid/ai-swautomorph/db/backup)"]
+options = ["Local backups (./softfluid/db/backup)", "Remote S3 backups (s3://softfluid/opcp-swautomorph/db/backup)"]
 terminal_menu = TerminalMenu(
     options,
     title="📍 Select backup source:",
@@ -463,7 +463,7 @@ EOF
     else
         # Fallback to numbered selection
         echo "1) Local backups (./softfluid/db/backup)"
-        echo "2) Remote S3 backups (s3://softfluid/ai-swautomorph/db/backup)"
+        echo "2) Remote S3 backups (s3://softfluid/opcp-swautomorph/db/backup)"
         read -p "Select backup source (1-2): " choice
         case $choice in
             1) BACKUP_SOURCE="local" ;;
@@ -492,11 +492,11 @@ EOF
         echo "📡 Select backup server:"
         
         # List all available server IPs in S3
-        S3_SERVERS=$(aws s3 ls s3://softfluid/ai-swautomorph/db/backup/ --profile OVH-SWAUTOMORPH 2>/dev/null | grep "PRE" | awk '{print $2}' | sed 's/\///' | sort)
+        S3_SERVERS=$(aws s3 ls s3://softfluid/opcp-swautomorph/db/backup/ --profile OVH-SWAUTOMORPH 2>/dev/null | grep "PRE" | awk '{print $2}' | sed 's/\///' | sort)
         
         if [ -z "$S3_SERVERS" ]; then
             echo -e "  $ERROR No server backups found in S3 bucket"
-            echo "    💡 Check S3 connection: aws s3 ls s3://softfluid/ai-swautomorph/db/backup/ --profile OVH-SWAUTOMORPH"
+            echo "    💡 Check S3 connection: aws s3 ls s3://softfluid/opcp-swautomorph/db/backup/ --profile OVH-SWAUTOMORPH"
             exit 1
         fi
         
@@ -581,11 +581,11 @@ EOF
         echo "  ✅ Selected server: $SELECTED_SERVER"
         
         # List S3 backup directories for the selected server
-        S3_BACKUPS=$(aws s3 ls "s3://softfluid/ai-swautomorph/db/backup/$SELECTED_SERVER/" --profile OVH-SWAUTOMORPH 2>/dev/null | grep "PRE" | awk '{print $2}' | sed 's/\///' | sort -r)
+        S3_BACKUPS=$(aws s3 ls "s3://softfluid/opcp-swautomorph/db/backup/$SELECTED_SERVER/" --profile OVH-SWAUTOMORPH 2>/dev/null | grep "PRE" | awk '{print $2}' | sed 's/\///' | sort -r)
         
         if [ -z "$S3_BACKUPS" ]; then
             echo -e "  $ERROR No backups found for server $SELECTED_SERVER in S3 bucket"
-            echo "    💡 Check S3 path: aws s3 ls s3://softfluid/ai-swautomorph/db/backup/$SELECTED_SERVER/ --profile OVH-SWAUTOMORPH"
+            echo "    💡 Check S3 path: aws s3 ls s3://softfluid/opcp-swautomorph/db/backup/$SELECTED_SERVER/ --profile OVH-SWAUTOMORPH"
             exit 1
         fi
         
@@ -669,8 +669,8 @@ EOF
         mkdir -p "$BACKUP_DIR"
         
         # Download the selected backup from S3
-        echo "  📥 Syncing from s3://softfluid/ai-swautomorph/db/backup/$SELECTED_SERVER/$SELECTED_BACKUP/ ..."
-        if aws s3 sync "s3://softfluid/ai-swautomorph/db/backup/$SELECTED_SERVER/$SELECTED_BACKUP/" "$BACKUP_DIR/" --profile OVH-SWAUTOMORPH; then
+        echo "  📥 Syncing from s3://softfluid/opcp-swautomorph/db/backup/$SELECTED_SERVER/$SELECTED_BACKUP/ ..."
+        if aws s3 sync "s3://softfluid/opcp-swautomorph/db/backup/$SELECTED_SERVER/$SELECTED_BACKUP/" "$BACKUP_DIR/" --profile OVH-SWAUTOMORPH; then
             echo -e "  $OK Backup downloaded successfully"
         else
             echo -e "  $ERROR Failed to download backup from S3"
@@ -1000,8 +1000,8 @@ stop_flask_service() {
 }
 
 remove_nginx_config() {
-    if [ -f "/etc/nginx/sites-enabled/ai-swautomorph" ]; then
-        sudo rm -f /etc/nginx/sites-enabled/ai-swautomorph
+    if [ -f "/etc/nginx/sites-enabled/opcp-swautomorph" ]; then
+        sudo rm -f /etc/nginx/sites-enabled/opcp-swautomorph
         # Only reload nginx if it's running
         if systemctl is-active --quiet nginx; then
             sudo nginx -t && sudo systemctl reload nginx
@@ -1500,7 +1500,7 @@ start_flask_application() {
         export POSTGRES_USER=${POSTGRES_USER:-swautomorph}
         export POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-swautomorph_password}
         export USE_POSTGRES=true
-        export PYTHONPATH=/home/ubuntu/ai-swautomorph
+        export PYTHONPATH=/home/ubuntu/opcp-swautomorph
         
         if python3 ./scripts/sf_cli.py init-db; then
             echo "  ✅ Database initialized successfully"
@@ -1592,7 +1592,7 @@ enable_modsecurity_module() {
 
 create_nginx_config() {
     # Start with empty config
-    > /tmp/ai-swautomorph-site
+    > /tmp/opcp-swautomorph-site
     
     # Process secondary domains first
     if [ -n "${SECONDARY_DOMAINS:-}" ]; then
@@ -1606,13 +1606,13 @@ create_nginx_config() {
             proxy_pass=$(echo "$proxy_pass" | xargs)
             
             if [ -n "$domain" ] && [ -n "$server_names" ]; then
-                cat >> /tmp/ai-swautomorph-site << EOF
+                cat >> /tmp/opcp-swautomorph-site << EOF
 server {
     listen 443 ssl;
     server_name ${server_names};
     
-    ssl_certificate /home/ubuntu/ai-swautomorph/ssl/${domain}/fullchain_domain.crt;
-    ssl_certificate_key /home/ubuntu/ai-swautomorph/ssl/${domain}/privateKey_domain.key;
+    ssl_certificate /home/ubuntu/opcp-swautomorph/ssl/${domain}/fullchain_domain.crt;
+    ssl_certificate_key /home/ubuntu/opcp-swautomorph/ssl/${domain}/privateKey_domain.key;
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_ciphers HIGH:!aNULL:!MD5;
 
@@ -1631,7 +1631,7 @@ EOF
     fi
     
     # HTTP redirect for main domain
-    cat >> /tmp/ai-swautomorph-site << EOF
+    cat >> /tmp/opcp-swautomorph-site << EOF
 server {
     listen 80;
     server_name ${DOMAIN} www.${DOMAIN};
@@ -1641,20 +1641,20 @@ server {
 EOF
     
     # Main domain HTTPS server block
-    cat >> /tmp/ai-swautomorph-site << EOF
+    cat >> /tmp/opcp-swautomorph-site << EOF
 server {
     listen 443 ssl;
     server_name ${DOMAIN} www.${DOMAIN};
     
-    ssl_certificate /home/ubuntu/ai-swautomorph/ssl/${DOMAIN}/fullchain_domain.crt;
-    ssl_certificate_key /home/ubuntu/ai-swautomorph/ssl/${DOMAIN}/privateKey_domain.key;
+    ssl_certificate /home/ubuntu/opcp-swautomorph/ssl/${DOMAIN}/fullchain_domain.crt;
+    ssl_certificate_key /home/ubuntu/opcp-swautomorph/ssl/${DOMAIN}/privateKey_domain.key;
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_ciphers HIGH:!aNULL:!MD5;
 EOF
 
     # Add ModSecurity configuration only if available
     if [ "${MODSECURITY_AVAILABLE:-false}" = "true" ]; then
-        cat >> /tmp/ai-swautomorph-site << EOF
+        cat >> /tmp/opcp-swautomorph-site << EOF
     
     # WAF Protection
     modsecurity on;
@@ -1666,7 +1666,7 @@ EOF
     fi
 
     # Add location blocks for main domain
-    cat >> /tmp/ai-swautomorph-site << EOF
+    cat >> /tmp/opcp-swautomorph-site << EOF
     
     location / {
         proxy_pass http://localhost:${FLASK_PORT:-5000};
@@ -1700,8 +1700,8 @@ EOF
 }
 
 enable_nginx_site() {
-    sudo mv /tmp/ai-swautomorph-site /etc/nginx/sites-available/ai-swautomorph
-    sudo ln -sf /etc/nginx/sites-available/ai-swautomorph /etc/nginx/sites-enabled/
+    sudo mv /tmp/opcp-swautomorph-site /etc/nginx/sites-available/opcp-swautomorph
+    sudo ln -sf /etc/nginx/sites-available/opcp-swautomorph /etc/nginx/sites-enabled/
 }
 
 test_and_reload_nginx() {
@@ -1943,7 +1943,7 @@ EOF
 
 # Show usage information
 help() {
-    echo "🚀 AI-SwAutoMorph Deployment Script"
+    echo "🚀 OPCP-SwAutoMorph Deployment Script"
     echo "Usage: $0 [COMMAND] [MODE] [USER_ID] [USER_NAME] [USER_EMAIL] [DESCRIPTION] [OPTIONS]"
     echo ""
     echo "COMMANDS:"

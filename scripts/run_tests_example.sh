@@ -3,7 +3,7 @@
 # This demonstrates various ways to use the testing tool
 
 echo "=================================="
-echo "AI-SwAutoMorph Platform Tests"
+echo "OPCP-SwAutoMorph Platform Tests"
 echo "=================================="
 echo ""
 

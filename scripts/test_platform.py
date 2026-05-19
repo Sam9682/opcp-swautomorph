@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Comprehensive Platform Testing Tool for AI-SwAutoMorph
+Comprehensive Platform Testing Tool for OPCP-SwAutoMorph
 
-This tool provides automated testing for all major functionality of the AI-SwAutoMorph platform.
+This tool provides automated testing for all major functionality of the OPCP-SwAutoMorph platform.
 It tests authentication, API endpoints, database operations, deployments, nginx configuration,
 virtual agents, billing, server management, replication, and orchestration.
 
@@ -258,7 +258,7 @@ def setup_logging(verbose: bool = False, quiet: bool = False):
 def parse_arguments():
     """Parse command-line arguments"""
     parser = argparse.ArgumentParser(
-        description='Comprehensive Platform Testing Tool for AI-SwAutoMorph',
+        description='Comprehensive Platform Testing Tool for OPCP-SwAutoMorph',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -906,7 +906,7 @@ def main():
     
     if not args.quiet:
         logger.info("=" * 80)
-        logger.info("AI-SwAutoMorph Platform Testing Tool")
+        logger.info("OPCP-SwAutoMorph Platform Testing Tool")
         logger.info("=" * 80)
         logger.info(f"Platform: {config.base_url}")
         logger.info(f"Database: {config.db_host}:{config.db_port}/{config.db_name}")

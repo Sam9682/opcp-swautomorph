@@ -37,7 +37,7 @@ def select_from_list(items, title="Select an option"):
 
 @click.group()
 def cli():
-    """AI-SwAutoMorph CLI Tool"""
+    """OPCP-SwAutoMorph CLI Tool"""
     pass
 
 @cli.command()
