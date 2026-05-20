@@ -1499,11 +1499,24 @@ start_flask_application() {
     if [ "${USE_POSTGRES:-true}" = "true" ]; then
         echo "  💾 Initializing PostgreSQL database..."
         export POSTGRES_HOST=${POSTGRES_HOST:-localhost}
+        export POSTGRES_PORT=${POSTGRES_PORT:-5432}
         export POSTGRES_DB=${POSTGRES_DB:-ai_swautomorph}
         export POSTGRES_USER=${POSTGRES_USER:-swautomorph}
         export POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-swautomorph_password}
         export USE_POSTGRES=true
         export PYTHONPATH=/home/ubuntu/opcp-swautomorph
+        
+        # Ensure PostgreSQL service is running
+        if ! pg_isready -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" >/dev/null 2>&1; then
+            echo "  🔄 Starting PostgreSQL service..."
+            sudo systemctl start postgresql
+            sleep 2
+            if pg_isready -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" >/dev/null 2>&1; then
+                echo "  ✅ PostgreSQL service started"
+            else
+                echo "  ❌ Failed to start PostgreSQL service"
+            fi
+        fi
         
         if python3 ./scripts/sf_cli.py init-db; then
             echo "  ✅ Database initialized successfully"
