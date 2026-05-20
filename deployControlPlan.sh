@@ -382,10 +382,10 @@ backup_database() {
     echo "    📍 Server IP: $SERVER_IP"
     
     # Sync the specific backup to S3 with IP-based path structure
-    if aws s3 sync "$BACKUP_DIR" "s3://softfluid/opcp-swautomorph/db/backup/$SERVER_IP/$DATETIME/" --profile OVH-SWAUTOMORPH; then
-        echo -e "  $OK Backup synced to s3://softfluid/opcp-swautomorph/db/backup/$SERVER_IP/$DATETIME/"
+    if aws s3 sync "$BACKUP_DIR" "s3://opcp-psmc-s3/opcp-swautomorph/db/backup/$SERVER_IP/$DATETIME/" --profile OVH-SWAUTOMORPH 2>/dev/null; then
+        echo -e "  $OK Backup synced to s3://opcp-psmc-s3/opcp-swautomorph/db/backup/$SERVER_IP/$DATETIME/"
     else
-        echo "  ⚠️ S3 sync failed or not configured"
+        echo "  ⚠️ S3 sync failed or bucket not configured - local backup preserved at $BACKUP_DIR"
     fi
 }
 
@@ -395,8 +395,11 @@ backup_logs() {
     
     if [ -d "logs" ] && [ "$(ls -A logs 2>/dev/null)" ]; then
         echo "  📄 Synchronizing logs to S3..."
-        aws s3 sync ./logs s3://softfluid/opcp-swautomorph/logs --profile OVH-SWAUTOMORPH
-        echo -e "  $OK Logs backup completed"
+        if aws s3 sync ./logs s3://opcp-psmc-s3/opcp-swautomorph/logs --profile OVH-SWAUTOMORPH 2>/dev/null; then
+            echo -e "  $OK Logs backup completed"
+        else
+            echo -e "  $WARN S3 sync failed or bucket not configured - skipping logs backup"
+        fi
     else
         echo -e "  $WARN No logs directory or logs found - skipping backup"
     fi
@@ -446,7 +449,7 @@ recover_database() {
         BACKUP_SOURCE=$(python3 << 'EOF'
 from simple_term_menu import TerminalMenu
 
-options = ["Local backups (./softfluid/db/backup)", "Remote S3 backups (s3://softfluid/opcp-swautomorph/db/backup)"]
+options = ["Local backups (./softfluid/db/backup)", "Remote S3 backups (s3://opcp-psmc-s3/opcp-swautomorph/db/backup)"]
 terminal_menu = TerminalMenu(
     options,
     title="📍 Select backup source:",
@@ -463,7 +466,7 @@ EOF
     else
         # Fallback to numbered selection
         echo "1) Local backups (./softfluid/db/backup)"
-        echo "2) Remote S3 backups (s3://softfluid/opcp-swautomorph/db/backup)"
+        echo "2) Remote S3 backups (s3://opcp-psmc-s3/opcp-swautomorph/db/backup)"
         read -p "Select backup source (1-2): " choice
         case $choice in
             1) BACKUP_SOURCE="local" ;;
@@ -492,11 +495,11 @@ EOF
         echo "📡 Select backup server:"
         
         # List all available server IPs in S3
-        S3_SERVERS=$(aws s3 ls s3://softfluid/opcp-swautomorph/db/backup/ --profile OVH-SWAUTOMORPH 2>/dev/null | grep "PRE" | awk '{print $2}' | sed 's/\///' | sort)
+        S3_SERVERS=$(aws s3 ls s3://opcp-psmc-s3/opcp-swautomorph/db/backup/ --profile OVH-SWAUTOMORPH 2>/dev/null | grep "PRE" | awk '{print $2}' | sed 's/\///' | sort)
         
         if [ -z "$S3_SERVERS" ]; then
             echo -e "  $ERROR No server backups found in S3 bucket"
-            echo "    💡 Check S3 connection: aws s3 ls s3://softfluid/opcp-swautomorph/db/backup/ --profile OVH-SWAUTOMORPH"
+            echo "    💡 Check S3 connection: aws s3 ls s3://opcp-psmc-s3/opcp-swautomorph/db/backup/ --profile OVH-SWAUTOMORPH"
             exit 1
         fi
         
@@ -581,11 +584,11 @@ EOF
         echo "  ✅ Selected server: $SELECTED_SERVER"
         
         # List S3 backup directories for the selected server
-        S3_BACKUPS=$(aws s3 ls "s3://softfluid/opcp-swautomorph/db/backup/$SELECTED_SERVER/" --profile OVH-SWAUTOMORPH 2>/dev/null | grep "PRE" | awk '{print $2}' | sed 's/\///' | sort -r)
+        S3_BACKUPS=$(aws s3 ls "s3://opcp-psmc-s3/opcp-swautomorph/db/backup/$SELECTED_SERVER/" --profile OVH-SWAUTOMORPH 2>/dev/null | grep "PRE" | awk '{print $2}' | sed 's/\///' | sort -r)
         
         if [ -z "$S3_BACKUPS" ]; then
             echo -e "  $ERROR No backups found for server $SELECTED_SERVER in S3 bucket"
-            echo "    💡 Check S3 path: aws s3 ls s3://softfluid/opcp-swautomorph/db/backup/$SELECTED_SERVER/ --profile OVH-SWAUTOMORPH"
+            echo "    💡 Check S3 path: aws s3 ls s3://opcp-psmc-s3/opcp-swautomorph/db/backup/$SELECTED_SERVER/ --profile OVH-SWAUTOMORPH"
             exit 1
         fi
         
@@ -669,8 +672,8 @@ EOF
         mkdir -p "$BACKUP_DIR"
         
         # Download the selected backup from S3
-        echo "  📥 Syncing from s3://softfluid/opcp-swautomorph/db/backup/$SELECTED_SERVER/$SELECTED_BACKUP/ ..."
-        if aws s3 sync "s3://softfluid/opcp-swautomorph/db/backup/$SELECTED_SERVER/$SELECTED_BACKUP/" "$BACKUP_DIR/" --profile OVH-SWAUTOMORPH; then
+        echo "  📥 Syncing from s3://opcp-psmc-s3/opcp-swautomorph/db/backup/$SELECTED_SERVER/$SELECTED_BACKUP/ ..."
+        if aws s3 sync "s3://opcp-psmc-s3/opcp-swautomorph/db/backup/$SELECTED_SERVER/$SELECTED_BACKUP/" "$BACKUP_DIR/" --profile OVH-SWAUTOMORPH; then
             echo -e "  $OK Backup downloaded successfully"
         else
             echo -e "  $ERROR Failed to download backup from S3"
@@ -795,10 +798,10 @@ stop_services() {
     remove_backup_cron
     
     # Create database backup before stopping services
-    backup_database
+    backup_database || echo -e "  $WARN Database backup skipped due to errors"
     
     # Create logs backup before stopping services
-    backup_logs
+    backup_logs || echo -e "  $WARN Logs backup skipped due to errors"
     
     CLEANUP_NEEDED=false
     
@@ -1305,10 +1308,10 @@ PATH = /home/ubuntu/admin/db/gitea.db
 ROOT = /home/ubuntu/admin/data/gitea-repositories
 
 [server]
-DOMAIN = www.softfluid.fr
+DOMAIN = www.opcp-psmc.com
 HTTP_ADDR = 0.0.0.0
 HTTP_PORT = 3000
-ROOT_URL = https://www.softfluid.fr/gitea/
+ROOT_URL = https://www.opcp-psmc.com/gitea/
 
 [mailer]
 ENABLED = false
@@ -1385,7 +1388,7 @@ create_gitea_admin_user() {
     echo "  🔑 Gitea Admin Credentials:"
     echo "      Username: gitadmin"
     echo "      Password: password"
-    echo "      URL: http://www.softfluid.fr/gitea"
+    echo "      URL: http://www.opcp-psmc.com/gitea"
     
     # Try to generate API token with timeout
     setup_api_token
@@ -2063,8 +2066,8 @@ help() {
     echo "  • Docker Containers (optional)"
     echo ""
     echo "ACCESS URLS:"
-    echo "  • Main App: https://www.softfluid.fr"
-    echo "  • Gitea:    https://www.softfluid.fr/gitea"
+    echo "  • Main App: https://www.opcp-psmc.com"
+    echo "  • Gitea:    https://www.opcp-psmc.com/gitea"
     echo "  • Local:    https://localhost (with SSL certificates)"
 }
 

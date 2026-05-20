@@ -165,7 +165,9 @@ class PostgreSQLManager:
                         else:
                             result = cursor.rowcount
                         
-                        conn.commit()
+                        # Only commit for non-SELECT (data-modifying) queries
+                        if not converted_query.strip().upper().startswith('SELECT'):
+                            conn.commit()
                         
                         # Queue replication for INSERT/UPDATE on replicated tables
                         self._queue_replication(converted_query, params)
